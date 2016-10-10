@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			html,body,ul,li,a{
+				margin: 0;
+				padding: 0;
+			}
+			ul,li{
+				list-style: none;
+			}
+			a{text-decoration: none;}
+			#banner{
+				width:730px;
+				height:454px;
+				border:1px solid #ccc;
+				overflow: hidden;
+				margin: 20px auto;
+				position: relative;
+			}
+			.xy,.dy{
+				width:50px;
+				height:50px;
+				position: absolute;
+				top:190px;
+				font-size:50px ;
+			}
+			.xy{
+				left:0;
+				z-index: 999;
+				display: none;
+			}
+			.dy{
+				right:0;
+				z-index: 999;
+				display: none;
+			}
+			#nav{
+				position: absolute;
+				left: 40%;
+				bottom: 20px;
+				z-index: 999;
+			}
+			#nav .nav1{
+				float: left;
+				width:20px;
+				height:20px;
+				background: #ccc;
+				margin-right: 10px;
+				cursor: pointer;
+				border-radius:50px ;
+				text-align: center;
+				line-height: 20px;
+				z-index: 999;
+			}
+			#box a{
+				position: absolute;
+            	top: 0;
+            	left: 0;
+				z-index: 0;
+				opacity: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="banner">
+			<div class="xy">&lt;</div>
+			<div class="dy">&gt;</div>
+			<div id="box">
+				<a class="pic" style="z-index: 1;opacity: 1"><img src="images/0.jpg"></a>
+				<a class="pic"><img src="images/1.jpg"></a>
+				<a class="pic"><img src="images/2.jpg"></a>
+				<a class="pic"><img src="images/3.jpg"></a>
+				<a class="pic"><img src="images/4.jpg"></a>
+				<a class="pic"><img src="images/5.jpg"></a>
+			</div>
+			<div id="nav">
+				<div class="nav1" name="0">1</div>
+				<div class="nav1" name="1">2</div>
+				<div class="nav1" name="2">3</div>
+				<div class="nav1" name="3">4</div>
+				<div class="nav1" name="4">5</div>
+				<div class="nav1" name="5">6</div>
+			</div>
+		</div>
+		<script src="js/animate1.0.1.js"></script>
+		<script>
+			var banner = document.getElementById("banner");
+			var dy = banner.children[1];
+			var xy = banner.children[0];
+			var box = document.getElementById("box");
+			var as = box.children;
+			var nav = document.getElementById("nav");
+			var nav1 = nav.children;
+			var cindex =0;
+			var timer = setInterval(autoPlay,3000);
+			
+			//开始轮播
+			function autoPlay(){
+				cindex++;
+				if(cindex>=as.length){
+					cindex = 0;	
+				}
+				show();
+			}
+			
+			//图片透明轮播
+			function show(){
+				for(var i=0; i<as.length;i++){
+					as[i].style.zIndex = 0;
+					fadeOut(as[i]);
+					nav1[i].style.background = "#ccc";
+				}
+				as[cindex].style.zIndex=1;
+				fadeIn(as[cindex]);
+				nav1[cindex].style.background = "red";
+			}
+			//给小圆点添加鼠标浮动事件
+			for(var j=0;j<nav1.length;j++){
+				nav1[j].onmouseover=function(){
+					cindex = parseInt(this.getAttribute("name"));
+					show();
+				}
+			}
+			//鼠标放上事件
+			banner.onmouseover = function(){
+				clearInterval(timer);
+				xy.style.display="block";
+				dy.style.display="block";
+			}
+			//鼠标离开事件
+			banner.onmouseout = function(){
+				timer = setInterval(autoPlay,3000);
+				xy.style.display="none";
+				dy.style.display="none";
+			}
+			//点击事件向左
+			xy.onclick =function(){
+				cindex--;
+				if(cindex<0){
+					cindex=as.length-1;
+				}
+				show();
+			}
+			//点击事件向右
+			dy.onclick = function(){
+				cindex++;
+				if(cindex>as.length-1){
+					cindex=0;
+				}
+				show();
+			}
+		</script>
+	</body>
+</html>
